@@ -1,16 +1,14 @@
 package com.blz.addressbook;
 
 public class AddressBookMain {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("Welcome to AddressBook in By using collection");
         AddressBookService addressBookService = new AddressBook();
-        addressBookService.addContact(setContactDetails());
-        addressBookService.addContact(setContactDetails());
-        addressBookService.displayContact();
+        addressBookService.operationOfAddressBook();
 
     }
 
-    public  static ContactDetails setContactDetails(){
+    public ContactDetails setContactDetails() {
         ContactDetails contactDetails = new ContactDetails();
         Address address = new Address();
         UserInput userInput = new UserInput();
