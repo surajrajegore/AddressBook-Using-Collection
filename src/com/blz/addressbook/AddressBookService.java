@@ -8,5 +8,7 @@ public interface AddressBookService {
     public void displayContact();
 
     public void editDetails();
+    public void deleteDetails();
+
 
 }

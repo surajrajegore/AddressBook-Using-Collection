@@ -28,7 +28,7 @@ public class AddressBook implements AddressBookService {
         int choice = 0;
         do {
             System.out.println("Which operation you want to perform ");
-            System.out.println("1. Add contact\n2. Edit Existing contact\n3. Display contacts book\n4. Exit");
+            System.out.println("1. Add contact\n2. Edit Existing contact\n3. Display contacts book\n4. Delete record\n5.Exit.");
             choice = UserInput.getInt();
             switch (choice) {
                 case 1:
@@ -41,6 +41,9 @@ public class AddressBook implements AddressBookService {
                     displayContact();
                     break;
                 case 4:
+                    deleteDetails();
+                    break;
+                case 5:
                     System.out.println("Terminated...");
                     break;
                 default:
@@ -48,7 +51,7 @@ public class AddressBook implements AddressBookService {
                     operationOfAddressBook();
                     break;
             }
-        } while (choice != 4);
+        } while (choice != 5);
     }
 
     @Override
@@ -110,6 +113,24 @@ public class AddressBook implements AddressBookService {
 
             } else {
                 System.out.println("Contact not found...");
+            }
+        }
+    }
+    public void deleteDetails(){
+        String name ="";
+        System.out.println("Enter name that you want to delete....");
+        name = UserInput.getString();
+        Iterator<ContactDetails> contactDetailsIterator = contactsList.iterator();
+        while (contactDetailsIterator.hasNext()){
+            ContactDetails contactDetails = contactDetailsIterator.next();
+            if (name.equals(contactDetails.getFirstName())){
+                contactsList.remove(contactDetails);
+                System.out.println("contact detail remove successfully...");
+                return;
+            }
+            else {
+                System.out.println("record not available...");
+                return;
             }
         }
     }
