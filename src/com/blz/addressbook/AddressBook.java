@@ -1,25 +1,33 @@
 package com.blz.addressbook;
 
-import com.sun.corba.se.spi.orbutil.fsm.Input;
-
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class AddressBook implements AddressBookService {
+    Map<String, ContactDetails> contactsList = new HashMap<String, ContactDetails>();
+    public static String addressBookName;
     AddressBookMain addressBookMain = new AddressBookMain();
-    Address  address = new Address();
-    ArrayList<ContactDetails> contactsList = new ArrayList<>();
+    Address address = new Address();
+
+    public static String getAddressBookName() {
+        return addressBookName;
+    }
+
+    public static void setAddressBookName(String addressBookName) {
+        AddressBook.addressBookName = addressBookName;
+    }
 
     @Override
     public void addContact(ContactDetails contact) {
-        contactsList.add(contact);
+        contactsList.put(contact.getFirstName(), contact);
     }
 
     @Override
     public void displayContact() {
-        Iterator<ContactDetails> iterator = contactsList.iterator();
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next());
+        System.out.println("Contacts of the addressbook " + AddressBook.getAddressBookName());
+        for (String contacts : contactsList.keySet()) {
+            ContactDetails contactDetails = contactsList.get(contacts);
         }
     }
 
@@ -35,7 +43,7 @@ public class AddressBook implements AddressBookService {
                     System.out.println("Enter how many records you want to insert.... ");
                     int numberOfRecords = UserInput.getInt();
                     int i = 0;
-                    while(i < numberOfRecords){
+                    while (i < numberOfRecords) {
                         addContact(addressBookMain.setContactDetails());
                         i++;
                     }
@@ -63,83 +71,77 @@ public class AddressBook implements AddressBookService {
 
     @Override
     public void editDetails() {
+        ContactDetails contactDetails = new ContactDetails();
         System.out.println("Enter first name that you want to update");
         String firstNameWantToEdit = UserInput.getString();
-        Iterator<ContactDetails> iterator = contactsList.iterator();
-        while (iterator.hasNext()) {
-            ContactDetails contactDetails = iterator.next();
-            if (firstNameWantToEdit.equals(contactDetails.getFirstName())) {
-                System.out.println("\nSelect which one you want to update : ");
-                System.out.println("1. Firstname\n2. Last Name\n3. Phone Number\n4. Email\n5. City\n6. State\n7. ZipCode\n8. Back");
-                int choice = UserInput.getInt();
+        if (contactsList.containsKey(firstNameWantToEdit)) {
+            contactDetails = contactsList.get(firstNameWantToEdit);
+            Address address = contactDetails.getAddress();
+            System.out.println("\nSelect which one you want to update : ");
+            System.out.println("1. Firstname\n2. Last Name\n3. Phone Number\n4. Email\n5. City\n6. State\n7. ZipCode\n8. Back");
+            int choice = UserInput.getInt();
 
-                switch (choice) {
-                    case 1:
-                        System.out.println("Enter the correct First Name :");
-                        contactDetails.setFirstName(UserInput.getString());
-                        System.out.println("Updated!");
-                        break;
-                    case 2:
-                        System.out.println("Enter the correct Last Name :");
-                        contactDetails.setLastName(UserInput.getString());
-                        System.out.println("Updated!");
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter the correct First Name :");
+                    contactDetails.setFirstName(UserInput.getString());
+                    System.out.println("Updated!");
+                    break;
+                case 2:
+                    System.out.println("Enter the correct Last Name :");
+                    contactDetails.setLastName(UserInput.getString());
+                    System.out.println("Updated!");
 
-                        break;
-                    case 3:
-                        System.out.println("Enter the correct Phone Number :");
-                        contactDetails.setPhoneNumber(UserInput.getLong());
-                        System.out.println("Updated!");
-                        break;
-                    case 4:
-                        System.out.println("Enter the correct Email Address :");
-                        contactDetails.seteMail(UserInput.getString());
-                        System.out.println("Updated!");
-                        break;
-                    case 5:
-                        System.out.println("Enter the correct City :");
-                        address.setCityName(UserInput.getString());
-                        System.out.println("Updated!");
-                        break;
-                    case 6:
-                        System.out.println("Enter the correct State :");
-                        address.setState(UserInput.getString());
-                        System.out.println("Updated!");
-                        break;
-                    case 7:
-                        System.out.println("Enter the correct ZipCode :");
-                        address.setZipCode(UserInput.getLong());
-                        System.out.println("Updated!");
-                        break;
-                    case 8:
-                        System.out.println("Edit Section got terminated");
-                        operationOfAddressBook();
-                    default:
-                        System.out.println("Kindly enter a valid input");
-                        break;
-                }
-
-            } else {
-                System.out.println("Contact not found...");
+                    break;
+                case 3:
+                    System.out.println("Enter the correct Phone Number :");
+                    contactDetails.setPhoneNumber(UserInput.getLong());
+                    System.out.println("Updated!");
+                    break;
+                case 4:
+                    System.out.println("Enter the correct Email Address :");
+                    contactDetails.seteMail(UserInput.getString());
+                    System.out.println("Updated!");
+                    break;
+                case 5:
+                    System.out.println("Enter the correct City :");
+                    address.setCityName(UserInput.getString());
+                    System.out.println("Updated!");
+                    break;
+                case 6:
+                    System.out.println("Enter the correct State :");
+                    address.setState(UserInput.getString());
+                    System.out.println("Updated!");
+                    break;
+                case 7:
+                    System.out.println("Enter the correct ZipCode :");
+                    address.setZipCode(UserInput.getLong());
+                    System.out.println("Updated!");
+                    break;
+                case 8:
+                    System.out.println("Edit Section got terminated");
+                    operationOfAddressBook();
+                default:
+                    System.out.println("Kindly enter a valid input");
+                    break;
             }
+
+        } else {
+            System.out.println("Contact not found...");
         }
     }
-    public void deleteDetails(){
-        String name ="";
+
+    public void deleteDetails() {
+        String name = "";
         System.out.println("Enter name that you want to delete....");
         name = UserInput.getString();
-        Iterator<ContactDetails> contactDetailsIterator = contactsList.iterator();
-        while (contactDetailsIterator.hasNext()){
-            ContactDetails contactDetails = contactDetailsIterator.next();
-            if (name.equals(contactDetails.getFirstName())){
-                contactsList.remove(contactDetails);
-                System.out.println("contact detail remove successfully...");
-                return;
-            }
-            else {
-                System.out.println("record not available...");
-                return;
-            }
+        if (contactsList.containsKey(name)) {
+            contactsList.remove(name);
+            System.out.println(" contact removed!");
+        } else {
+            System.out.println("Contact not found...");
         }
     }
 }
+
 
