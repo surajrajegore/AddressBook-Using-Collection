@@ -32,7 +32,14 @@ public class AddressBook implements AddressBookService {
             choice = UserInput.getInt();
             switch (choice) {
                 case 1:
-                    addContact(addressBookMain.setContactDetails());
+                    System.out.println("Enter how many records you want to insert.... ");
+                    int numberOfRecords = UserInput.getInt();
+                    int i = 0;
+                    while(i < numberOfRecords){
+                        addContact(addressBookMain.setContactDetails());
+                        i++;
+                    }
+
                     break;
                 case 2:
                     editDetails();
